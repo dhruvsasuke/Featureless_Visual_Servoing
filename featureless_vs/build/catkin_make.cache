@@ -1,0 +1,2 @@
+
+-DCATKIN_DEVEL_PREFIX=/home/krishna/projects/featureless_vs/devel -DCMAKE_INSTALL_PREFIX=/home/krishna/projects/featureless_vs/install -G Unix Makefiles
