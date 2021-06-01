@@ -7,17 +7,22 @@ from pointcloud import generate_pointcloud
 from sensor_msgs.msg import PointCloud
 from geometry_msgs.msg import Point32
 import std_msgs.msg
+import pickle
 
 bridge = CvBridge()
 bin_img = np.zeros((480,640,3)).astype('uint8')
 point_cloud = []
 pointcloud_publisher = rospy.Publisher("/pointcloud", PointCloud)
-pcl = PointCloud()
+# pcl = PointCloud()
 
 def depth_callback(data):
-    global bin_img, point_cloud, pcl, pointcloud_publisher
+    global bin_img, point_cloud, pointcloud_publisher
     depth_image = bridge.imgmsg_to_cv2(data, desired_encoding='passthrough')
     point_cloud = generate_pointcloud(bin_img, depth_image)
+    # with open('pcl.txt', 'w') as f:
+    #     for item in point_cloud:
+    #         np.savetxt(f, point_cloud, delimiter=' ', newline='\n', header='', footer='', comments='# ')
+    pcl = PointCloud()
     header = std_msgs.msg.Header()
     header.stamp = rospy.Time.now()
     header.frame_id = 'map'

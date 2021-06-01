@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/krishna/projects/featureless_vs/src
+CMAKE_SOURCE_DIR = /home/krishna/projects/RP2/featureless_vs/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/krishna/projects/featureless_vs/build
+CMAKE_BINARY_DIR = /home/krishna/projects/RP2/featureless_vs/build
 
 # Utility rule file for run_tests.
 
@@ -78,6 +78,6 @@ CMakeFiles/run_tests.dir/clean:
 .PHONY : CMakeFiles/run_tests.dir/clean
 
 CMakeFiles/run_tests.dir/depend:
-	cd /home/krishna/projects/featureless_vs/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/krishna/projects/featureless_vs/src /home/krishna/projects/featureless_vs/src /home/krishna/projects/featureless_vs/build /home/krishna/projects/featureless_vs/build /home/krishna/projects/featureless_vs/build/CMakeFiles/run_tests.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/krishna/projects/RP2/featureless_vs/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/krishna/projects/RP2/featureless_vs/src /home/krishna/projects/RP2/featureless_vs/src /home/krishna/projects/RP2/featureless_vs/build /home/krishna/projects/RP2/featureless_vs/build /home/krishna/projects/RP2/featureless_vs/build/CMakeFiles/run_tests.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/run_tests.dir/depend
 

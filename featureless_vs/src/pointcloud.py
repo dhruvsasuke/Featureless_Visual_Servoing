@@ -3,8 +3,8 @@ import numpy as np
 
 x_centre = 319.5
 y_centre = 239.5
-scalingFactor = 5000.0
-focalLength = 938.0
+scalingFactor = 1000.0
+focalLength = 531.0 
 
 def generate_pointcloud(bin_img, depth_map):
     global x_centre, y_centre, scalingFactor, focalLength

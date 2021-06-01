@@ -7,7 +7,6 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/krishna/projects/featureless_vs/devel:$CMAKE_PREFIX_PATH"
-export PWD='/home/krishna/projects/featureless_vs/build'
-export ROSLISP_PACKAGE_DIRECTORIES='/home/krishna/projects/featureless_vs/devel/share/common-lisp'
-export ROS_PACKAGE_PATH="/home/krishna/projects/featureless_vs/src:$ROS_PACKAGE_PATH"
+export LD_LIBRARY_PATH='/opt/ros/kinetic/lib:/opt/ros/kinetic/lib/x86_64-linux-gnu'
+export PWD='/home/krishna/projects/RP2/featureless_vs/build'
+export ROS_PACKAGE_PATH='/home/krishna/projects/RP2/featureless_vs/src:/opt/ros/kinetic/share'
