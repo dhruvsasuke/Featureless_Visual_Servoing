@@ -14,6 +14,7 @@ bridge = CvBridge()
 bin_img = np.zeros((480,640,3)).astype('uint8')
 point_cloud = []
 pointcloud_publisher = rospy.Publisher("/pointcloud", PointCloud)
+pose_publisher = rospy.Publisher("/current_pose", Float32MultiArray)
 # pcl = PointCloud()
 save = False
 
@@ -34,7 +35,14 @@ def depth_callback(data):
     if(len(point_cloud)>100):
         pose = compute_pca(np.asarray(point_cloud))
         centroid = compute_centroid(np.asarray(point_cloud))
-        print(centroid.shape)
+        tmp = centroid[0]
+        centroid[0] = centroid[1]
+        centroid[1] = tmp
+        msg = Float32MultiArray()
+        pose_6d = [centroid[0], centroid[1], centroid[2], pose[0], pose[1], pose[2]]
+        msg.data = pose_6d
+        pose_publisher.publish(msg)
+        # print(centroid)
     pcl = PointCloud()
     header = std_msgs.msg.Header()
     header.stamp = rospy.Time.now()
@@ -57,7 +65,7 @@ def rgb_callback(rgb_img):
     bin_img = cv2.morphologyEx(erode,cv2.MORPH_OPEN,kernel)
     cv2.imwrite('tmp.png', bin_img)
     # cv2.waitKey(0)
-    # print(mask)    
+    # print(mask)
 
 def segment():
     global pointcloud_publisher
