@@ -2,6 +2,7 @@ import rospy
 import numpy as np
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
+from std_msgs.msg import Float32MultiArray
 import cv2
 from pointcloud import generate_pointcloud
 from sensor_msgs.msg import PointCloud
@@ -14,14 +15,23 @@ bin_img = np.zeros((480,640,3)).astype('uint8')
 point_cloud = []
 pointcloud_publisher = rospy.Publisher("/pointcloud", PointCloud)
 # pcl = PointCloud()
+save = False
 
 def depth_callback(data):
-    global bin_img, point_cloud, pointcloud_publisher
-    depth_image = bridge.imgmsg_to_cv2(data, desired_encoding='passthrough')
-    point_cloud = generate_pointcloud(bin_img, depth_image)
-    # with open('pcl.txt', 'w') as f:
-    #     for item in point_cloud:
-    #         np.savetxt(f, point_cloud, delimiter=' ', newline='\n', header='', footer='', comments='# ')
+    global bin_img, point_cloud, pointcloud_publisher, save
+    depth = np.reshape(np.asarray(data.data), (480,640))
+    actual_depth = np.zeros((480,640))
+    for i in range(480):
+        actual_depth[i,:] = depth[479-i, :]
+    # print(actual_depth[0][0], actual_depth[479][639])
+    point_cloud = generate_pointcloud(bin_img, actual_depth)
+    if(not save):
+        with open('pcl.txt', 'w') as f:
+            for item in point_cloud:
+                print >> f, item[0], item[1], item[2]
+        if(len(point_cloud)>100):
+            save = True
+            print("Saved!!")
     pcl = PointCloud()
     header = std_msgs.msg.Header()
     header.stamp = rospy.Time.now()
@@ -35,7 +45,7 @@ def depth_callback(data):
 def rgb_callback(rgb_img):
     global bin_img
     cv_image = bridge.imgmsg_to_cv2(rgb_img, desired_encoding='passthrough')
-    mask = ((cv_image[:,:,0]>150) & (cv_image[:,:,1]<50) & (cv_image[:,:,2]<50)).astype('uint8')*255
+    mask = ((cv_image[:,:,0]>100) & (cv_image[:,:,1]<50) & (cv_image[:,:,2]<50)).astype('uint8')*255
     bin_img[:,:,0] = mask
     bin_img[:,:,1] = mask
     bin_img[:,:,2] = mask
@@ -50,7 +60,7 @@ def segment():
     global pointcloud_publisher
     rospy.init_node('segmentor_node', anonymous=True)
     rospy.Subscriber("/coppeliaSim/image/rgb", Image, rgb_callback)
-    rospy.Subscriber("/coppeliaSim/image/rgbd", Image, depth_callback)
+    rospy.Subscriber("/coppeliaSim/image/depthd", Float32MultiArray, depth_callback)
     rospy.spin()
 
 if __name__ == '__main__':
