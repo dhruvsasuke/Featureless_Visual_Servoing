@@ -8,7 +8,7 @@ from pointcloud import generate_pointcloud
 from sensor_msgs.msg import PointCloud
 from geometry_msgs.msg import Point32
 import std_msgs.msg
-import pickle
+from pca import compute_pca, compute_centroid
 
 bridge = CvBridge()
 bin_img = np.zeros((480,640,3)).astype('uint8')
@@ -23,7 +23,6 @@ def depth_callback(data):
     actual_depth = np.zeros((480,640))
     for i in range(480):
         actual_depth[i,:] = depth[479-i, :]
-    # print(actual_depth[0][0], actual_depth[479][639])
     point_cloud = generate_pointcloud(bin_img, actual_depth)
     if(not save):
         with open('pcl.txt', 'w') as f:
@@ -32,6 +31,10 @@ def depth_callback(data):
         if(len(point_cloud)>100):
             save = True
             print("Saved!!")
+    if(len(point_cloud)>100):
+        pose = compute_pca(np.asarray(point_cloud))
+        centroid = compute_centroid(np.asarray(point_cloud))
+        print(centroid.shape)
     pcl = PointCloud()
     header = std_msgs.msg.Header()
     header.stamp = rospy.Time.now()
