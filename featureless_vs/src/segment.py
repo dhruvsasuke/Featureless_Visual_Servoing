@@ -17,29 +17,46 @@ pointcloud_publisher = rospy.Publisher("/pointcloud", PointCloud)
 pose_publisher = rospy.Publisher("/current_pose", Float32MultiArray)
 # pcl = PointCloud()
 save = False
+prev_pose = np.zeros((2,3))
+pose = np.zeros((2,3))
 
 def depth_callback(data):
     global bin_img, point_cloud, pointcloud_publisher, save
+    global pose, prev_pose
     depth = np.reshape(np.asarray(data.data), (480,640))
     actual_depth = np.zeros((480,640))
     for i in range(480):
         actual_depth[i,:] = depth[479-i, :]
     point_cloud = generate_pointcloud(bin_img, actual_depth)
-    if(not save):
-        with open('pcl.txt', 'w') as f:
-            for item in point_cloud:
-                print >> f, item[0], item[1], item[2]
-        if(len(point_cloud)>100):
-            save = True
-            print("Saved!!")
+    # if(not save):
+    #     with open('pcl.txt', 'w') as f:
+    #         for item in point_cloud:
+    #             print >> f, item[0], item[1], item[2]
+    #     if(len(point_cloud)>100):
+    #         save = True
+    #         print("Saved!!")
     if(len(point_cloud)>100):
+        prev_pose = pose
         pose = compute_pca(np.asarray(point_cloud))
+        if(np.dot(prev_pose[0], pose[0])<(-0.5)):
+            pose[0] = -1*pose[0]
+            print("FLIPPED MAJOR!!!!")
+        if(np.dot(prev_pose[1], pose[1])<(-0.5)):
+            pose[1] = -1*pose[1]
+            print("FLIPPED MINOR!!!!")
+        # print(pose[0], pose[1])
         centroid = compute_centroid(np.asarray(point_cloud))
         tmp = centroid[0]
         centroid[0] = centroid[1]
         centroid[1] = tmp
+        tmp = pose[0][0]
+        pose[0][0] = pose[0][1]
+        pose[0][1] = tmp
+        tmp = pose[1][0]
+        pose[1][0] = pose[1][1]
+        pose[1][1] = tmp        
         msg = Float32MultiArray()
-        pose_6d = [centroid[0], centroid[1], centroid[2], pose[0], pose[1], pose[2]]
+        pose_6d = [centroid[0], centroid[1], centroid[2], pose[0][0], pose[0][1], pose[0][2], pose[1][0], pose[1][1], pose[1][2]]
         msg.data = pose_6d
         pose_publisher.publish(msg)
         # print(centroid)

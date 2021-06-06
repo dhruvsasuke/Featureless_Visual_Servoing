@@ -1,0 +1,7 @@
+set(robot_nodes_SETUP_PY_SETUP_MODULE "distutils.core")
+set(robot_nodes_SETUP_PY_VERSION "0.0.0")
+set(robot_nodes_SETUP_PY_SCRIPTS "")
+set(robot_nodes_SETUP_PY_PACKAGES "classPubSub;Avoidance_Task;Kinematics;Object_Detection;Plot_Data;Visual_Servoing")
+set(robot_nodes_SETUP_PY_PACKAGE_DIRS "src/classPubSub;src/Avoidance_Task;src/Kinematics;src/Object_Detection;src/Plot_Data;src/Visual_Servoing")
+set(robot_nodes_SETUP_PY_MODULES "")
+set(robot_nodes_SETUP_PY_MODULE_DIRS "")

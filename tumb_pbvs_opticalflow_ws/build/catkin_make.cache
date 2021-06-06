@@ -1,0 +1,2 @@
+robot_description:robot_nodes
+-DCATKIN_DEVEL_PREFIX=/home/krishna/projects/RP2/tumb_pbvs_opticalflow_ws/devel -DCMAKE_INSTALL_PREFIX=/home/krishna/projects/RP2/tumb_pbvs_opticalflow_ws/install -G Unix Makefiles
