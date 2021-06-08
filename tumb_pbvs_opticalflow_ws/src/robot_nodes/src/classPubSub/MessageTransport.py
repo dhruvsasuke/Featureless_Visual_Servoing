@@ -15,14 +15,14 @@ class Publish(object):
         
 class Subscribe(object):
     def __init__(self,topicName,msgType,size):
+        print("Class initiated")
         self.size = size
         self.data = np.zeros(self.size)
         self.msg = 0
         rospy.Subscriber(topicName,msgType,self.S_msg_callback)  
     def S_msg_callback(self,msg):
+        print("CALLBACK!!!")
         self.msg = msg
+        print(self.msg)
     def S_data_callback(self,msg_parameter):
         self.data = np.reshape(np.asarray(msg_parameter),self.size,order='C')
-
-
- 

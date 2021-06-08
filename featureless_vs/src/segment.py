@@ -28,13 +28,13 @@ def depth_callback(data):
     for i in range(480):
         actual_depth[i,:] = depth[479-i, :]
     point_cloud = generate_pointcloud(bin_img, actual_depth)
-    # if(not save):
-    #     with open('pcl.txt', 'w') as f:
-    #         for item in point_cloud:
-    #             print >> f, item[0], item[1], item[2]
-    #     if(len(point_cloud)>100):
-    #         save = True
-    #         print("Saved!!")
+    if(not save):
+        with open('pcl.txt', 'w') as f:
+            for item in point_cloud:
+                print >> f, item[0], item[1], item[2]
+        if(len(point_cloud)>100):
+            save = True
+            print("Saved!!")
     if(len(point_cloud)>100):
         prev_pose = pose
         pose = compute_pca(np.asarray(point_cloud))
